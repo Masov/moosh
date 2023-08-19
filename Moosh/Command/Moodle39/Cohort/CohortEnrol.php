@@ -66,7 +66,7 @@ class CohortEnrol extends MooshCommand
             $groupid = 0;
             // Check if user exists.
             if (!empty($options['groupid'])) {
-                if (!$user = $DB->get_record('group',array('id'=>$options['groupid']))) {
+                if (!$user = $DB->get_record('groups',array('id'=>$options['groupid']))) {
                     echo "Group does not exist\n";
                     exit(0);
                 }
