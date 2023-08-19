@@ -16,7 +16,7 @@ class CohortEnrol extends MooshCommand
 
         $this->addOption('u|userid:', 'userid');
         $this->addOption('c|courseid:', 'courseid');
-        $this->addOption('g|groupid:', 'groupid');
+        $this->addOption('g|groupid:', 'groupid', 0);
 
         $this->addArgument('name');
 
@@ -63,14 +63,12 @@ class CohortEnrol extends MooshCommand
                 }
             }
 
-            $groupid = 0;
             // Check if user exists.
-            if (!empty($options['groupid'])) {
-                if (!$user = $DB->get_record('groups',array('id'=>$options['groupid']))) {
+            if ($options['groupid'] != 0) {
+                if (!$DB->get_record('groups',array('id'=>$options['groupid']))) {
                     echo "Group does not exist\n";
                     exit(0);
                 }
-                $groupid = $options['groupid'];
             }
 
             // Add cohort to course
@@ -79,7 +77,7 @@ class CohortEnrol extends MooshCommand
                 foreach($cohorts as $cohort) {
 
                     // Check if cohort enrolment already exists
-                    if ($cohortenrolment = $DB->get_record('enrol',array('customint1'=>$cohort->id,'courseid'=>$options['courseid'],'customint2'=>$groupid))) {
+                    if ($cohortenrolment = $DB->get_record('enrol',array('customint1'=>$cohort->id,'courseid'=>$options['courseid'],'customint2'=>$options['groupid']))) {
                         echo " Notice: Cohort already enrolled into course\n";
                     } else {
 
@@ -91,7 +89,7 @@ class CohortEnrol extends MooshCommand
                             'status'=>0,
                             'customint1'=>$cohort->id,
                             'roleid'=>$studentrole->id,
-                            'customint2'=>$groupid
+                            'customint2'=>$options['groupid']
                         ));
                         echo "Cohort enrolled\n";
                     }
