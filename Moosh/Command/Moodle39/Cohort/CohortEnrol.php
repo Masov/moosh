@@ -85,7 +85,7 @@ class CohortEnrol extends MooshCommand
                         $studentrole = $DB->get_record('role',array('shortname'=>'student'));
 
                         $enrol->add_instance($course, array(
-                            'name'=>$argument . '_sync',
+                            'name'=>null,
                             'status'=>0,
                             'customint1'=>$cohort->id,
                             'roleid'=>$studentrole->id,
